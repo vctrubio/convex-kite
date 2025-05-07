@@ -2,9 +2,7 @@
 
 import { api } from "../convex/_generated/api";
 import Link from "next/link";
-import { useConvexAuth, useMutation, useQuery } from "convex/react";
-import { useAuthActions } from "@convex-dev/auth/react";
-import { useRouter } from "next/navigation";
+import { useMutation, useQuery } from "convex/react";
 import { ResourceCard } from "../components/Cards";
 import Navbar from "../components/Navbar";
 
