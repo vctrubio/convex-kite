@@ -10,4 +10,10 @@ export default defineSchema({
   numbers: defineTable({
     value: v.number(),
   }),
+
+  student: defineTable({
+    userId: v.id("users"),
+    height: v.number(),
+    weight: v.number(),
+  }),
 });
