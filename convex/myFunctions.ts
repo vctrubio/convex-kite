@@ -31,6 +31,14 @@ export const listNumbers = query({
   },
 });
 
+export const listStudents = query({
+  args: {},
+  handler: async (ctx, args) => {
+    const students = await ctx.db.query("student").collect();
+    return students;
+  },
+});
+
 // You can write data to the database via a mutation:
 export const addNumber = mutation({
   // Validators for arguments.
@@ -49,6 +57,22 @@ export const addNumber = mutation({
     console.log("Added new document with id:", id);
     // Optionally, return a value from your mutation.
     // return id;
+  },
+});
+
+export const addStudent = mutation({
+  args: {
+    userId: v.id("users"),
+    height: v.number(),
+    weight: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const id = await ctx.db.insert("student", {
+      userId: args.userId,
+      height: args.height,
+      weight: args.weight,
+    });
+    return id;
   },
 });
 

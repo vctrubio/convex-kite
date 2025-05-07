@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useMutation, useQuery } from "convex/react";
 import { ResourceCard } from "../components/Cards";
 import Navbar from "../components/Navbar";
+import { useState } from "react";
+import { useConvexAuth } from "convex/react";
 
 export default function Home() {
   return (
@@ -76,6 +78,30 @@ function UsefulResources() {
   );
 }
 
+function StudentList() {
+  const students = useQuery(api.myFunctions.listStudents, {});
+  const addStudent = useMutation(api.myFunctions.addStudent);
+  const [height, setHeight] = useState(0);
+  const [weight, setWeight] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+
+  return (
+    <div className="flex flex-col gap-4 p-4 border rounded-md">
+      <h2 className="text-xl font-bold">Students</h2>
+
+      {error && <div className="text-red-500 text-xs">{error}</div>}
+      <ul className="mt-2">
+        {students?.length === 0 && <li>No students yet.</li>}
+        {students?.map((student: any) => (
+          <li key={student._id} className="border-b py-1 text-sm">
+            Height: {student.height}, Weight: {student.weight}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function Content() {
   const { viewer, numbers } =
     useQuery(api.myFunctions.listNumbers, {
@@ -104,6 +130,7 @@ function Content() {
         for an example of loading data in a server component
       </p>
       <UsefulResources />
+      <StudentList />
     </div>
   );
 }
