@@ -1,137 +1,31 @@
-"use client";
+'use client'
 
-import { api } from "../convex/_generated/api";
 import Link from "next/link";
-import { useMutation, useQuery } from "convex/react";
-import { ResourceCard } from "../components/Cards";
-import Navbar from "../components/Navbar";
-import { useState } from "react";
-import { useConvexAuth } from "convex/react";
 
 export default function Home() {
   return (
-    <>
-      <Navbar />
-      <main className="p-8 flex flex-col gap-8">
-        <Content />
-        </main>
-    </>
-  );
-}
-
-function WelcomeMessage({ viewer }: { viewer: string | null}) {
-  return <p>Welcome {viewer ?? "Anonymous"}!</p>;
-}
-
-function AddNumberButton({ addNumber }: { addNumber: (arg: { value: number }) => void }) {
-  return (
-    <button
-      className="bg-foreground text-background text-sm px-4 py-2 rounded-md"
-      onClick={() => {
-        void addNumber({ value: Math.floor(Math.random() * 10) });
-      }}
-    >
-      Add a random number
-    </button>
-  );
-}
-
-function NumbersList({ numbers }: { numbers: number[] | undefined }) {
-  return (
-    <p>
-      Numbers: {numbers?.length === 0 ? "Click the button!" : (numbers?.join(", ") ?? "...")}
-    </p>
-  );
-}
-
-function UsefulResources() {
-  return (
-    <div className="flex flex-col">
-      <p className="text-lg font-bold">Useful resources:</p>
-      <div className="flex gap-2">
-        <div className="flex flex-col gap-2 w-1/2">
-          <ResourceCard
-            title="Convex docs"
-            description="Read comprehensive documentation for all Convex features."
-            href="https://docs.convex.dev/home"
-          />
-          <ResourceCard
-            title="Stack articles"
-            description="Learn about best practices, use cases, and more from a growing\ncollection of articles, videos, and walkthroughs."
-            href="https://www.typescriptlang.org/docs/handbook/2/basic-types.html"
-          />
-        </div>
-        <div className="flex flex-col gap-2 w-1/2">
-          <ResourceCard
-            title="Templates"
-            description="Browse our collection of templates to get started quickly."
-            href="https://www.convex.dev/templates"
-          />
-          <ResourceCard
-            title="Discord"
-            description="Join our developer community to ask questions, trade tips & tricks,\nand show off your projects."
-            href="https://www.convex.dev/community"
-          />
+    <main className="p-8 flex flex-col gap-8 items-center">
+      <div className="max-w-xl w-full flex flex-col items-center gap-6 p-8">
+        <h1 className="text-2xl font-bold text-center">Welcome to Kite Management 101</h1>
+        <div className="w-full flex flex-col items-center">
+          <h2 className="text-lg font-semibold mb-2">How Lessons Work</h2>
+          <ul className="mt-2 text-base text-gray-800 list-disc list-inside">
+            <li>Each <b>Lesson</b> has one or more <b>Students</b> and one or more <b>Teachers</b>.</li>
+            <li>Lessons have a <b>time</b> and <b>date</b>.</li>
+            <li>Lessons have a <b>confirmationLesson</b> (confirmation status or object).</li>
+            <li>Lessons have a <b>sessionId</b> and <b>bookingId</b>.</li>
+          </ul>
+          <Link
+            href="/dashboard"
+            className="mt-6 text-blue-600 hover:underline font-medium"
+          >
+            Go to Dashboard
+          </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 
-function StudentList() {
-  const students = useQuery(api.myFunctions.listStudents, {});
-  const addStudent = useMutation(api.myFunctions.addStudent);
-  const [height, setHeight] = useState(0);
-  const [weight, setWeight] = useState(0);
-  const [error, setError] = useState<string | null>(null);
 
-  return (
-    <div className="flex flex-col gap-4 p-4 border rounded-md">
-      <h2 className="text-xl font-bold">Students</h2>
-
-      {error && <div className="text-red-500 text-xs">{error}</div>}
-      <ul className="mt-2">
-        {students?.length === 0 && <li>No students yet.</li>}
-        {students?.map((student: any) => (
-          <li key={student._id} className="border-b py-1 text-sm">
-            Height: {student.height}, Weight: {student.weight}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function Content() {
-  const { viewer, numbers } =
-    useQuery(api.myFunctions.listNumbers, {
-      count: 10,
-    }) ?? {};
-  const addNumber = useMutation(api.myFunctions.addNumber);
-
-  if (viewer === undefined || numbers === undefined) {
-    return (
-      <div className="mx-auto">
-        <p>loading... (consider a loading skeleton)</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col gap-8 max-w-lg mx-auto">
-      <WelcomeMessage viewer={viewer} />
-      <AddNumberButton addNumber={addNumber} />
-      <NumbersList numbers={numbers} />
-      <p>
-        See the{" "}
-        <Link href="/server" className="underline hover:no-underline">
-          /server route
-        </Link>{" "}
-        for an example of loading data in a server component
-      </p>
-      <UsefulResources />
-      <StudentList />
-    </div>
-  );
-}
 
