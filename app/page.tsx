@@ -96,10 +96,6 @@ function Content() {
   return (
     <div className="flex flex-col gap-8 max-w-lg mx-auto">
       <WelcomeMessage viewer={viewer} />
-      <p>
-        Click the button below and open this page in another window - this data
-        is persisted in the Convex cloud database!
-      </p>
       <AddNumberButton addNumber={addNumber} />
       <NumbersList numbers={numbers} />
       <p>
